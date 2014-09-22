@@ -1,6 +1,7 @@
 This is the git repository for Spectrum Access System
 APModel-----python codes for data population
 include-----c++ contains nanaflann library, which is c++ verison of KD tree
-test--------test codes in C for KD-tree testing
+test--------test codes in c++ for KD-tree testing
+src---------codes in c++ to add points and build the tree
 Makefile----compile nano_test.cpp
 

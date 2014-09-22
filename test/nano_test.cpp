@@ -46,6 +46,10 @@ using namespace nanoflann;
 template <typename T>
 struct PointCloud
 {
+	//three functions necessary
+	//	kdtree_get_point_count
+	//	kdtree_distance
+	//	kdtree_get_pt
 	struct Point
 	{
 		T  x,y,z;
@@ -64,7 +68,7 @@ struct PointCloud
 	inline size_t kdtree_get_point_count() const { return pts.size(); }
 
 	// Returns the distance between the vector "p1[0:size-1]" and the data point with index "idx_p2" stored in the class:
-	inline float kdtree_distance(const float *p1, const size_t idx_p2,size_t size) const
+	inline float kdtree_distance(const T *p1, const size_t idx_p2,size_t size) const
 	{
 		float d0=p1[0]-pts[idx_p2].x;
 		float d1=p1[1]-pts[idx_p2].y;
@@ -144,21 +148,23 @@ void perf_test(const size_t N)
 	// do a knn search
 	t0=get_time();
 
-	const size_t num_results = 1;
-	size_t ret_index;
-	num_t out_dist_sqr;
-	nanoflann::KNNResultSet<num_t> resultSet(num_results);
-	resultSet.init(&ret_index, &out_dist_sqr );
-
-	std::vector< std::pair<size_t,num_t> > indicesDist;
+	//const size_t num_results = 1;
+	//size_t ret_index;
+	//num_t out_dist_sqr;
+	//nanoflann::KNNResultSet<num_t> resultSet(num_results);
+	//resultSet.init(&ret_index, &out_dist_sqr );
 	//index.findNeighbors(resultSet, &query_pt[0], nanoflann::SearchParams(10));
 	//index.knnSearch(query, indices, dists, num_results, nanoflann::SearchParams(10));
+
+	std::vector< std::pair<size_t,num_t> > indicesDist;
 	index.radiusSearch(&query_pt[0],0.25,indicesDist,nanoflann::SearchParams(10));
 
 	t1=get_time();
 	const double At_search = t1-t0;
-	VERB_COUT << "knnSearch(nn="<<num_results<<"): " << (t1-t0)*1e3 << " ms\n";
-	VERB_COUT << "ret_index=" << ret_index << " out_dist_sqr=" << out_dist_sqr << endl;
+	VERB_COUT << "radiusSearch: " << (t1-t0)*1e3 << " ms\n";
+	//VERB_COUT << "knnSearch(nn="<<num_results<<"): " << (t1-t0)*1e3 << " ms\n";
+	//VERB_COUT << "ret_index=" << ret_index << " out_dist_sqr=" << out_dist_sqr << endl;
+	//VERB_COUT << "# of returned indices "<<indicesDist.size() << endl;
 
 
 	cout
