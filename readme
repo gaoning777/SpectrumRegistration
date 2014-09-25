@@ -5,3 +5,6 @@ test--------test codes in c++ for KD-tree testing for both nanoflann and libkdtr
 src---------codes in c++ to add points and build the tree
 Makefile----compile both test and src
 
+Limitation right now
+(1) it supports add/remove/find_withinrange but find_withinrange doesn't use euclidean  distance
+(2) it only supports long long as the value in tree nodes
