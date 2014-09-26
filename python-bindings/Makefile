@@ -5,7 +5,7 @@ PY_INCLUDE_DIR=$(shell python-config --includes)
 
 # CPPFLAGS is used by the default rules. Using "override" and "+="
 # allows the user to prepend things to CPPFLAGS on the command line.
-override CPPFLAGS += -I$(INCLUDE_DIR) -pedantic -Wno-long-long -Wall -ansi -pedantic
+override CPPFLAGS += -pedantic -Wno-long-long -Wall -ansi
 
 # swig bindings
 py-kdtree: _kdtree.so
