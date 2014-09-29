@@ -93,7 +93,7 @@ class KDTree_2FloatTestCase(unittest.TestCase):
 	nn.add(((1.1,1.1),1))
 	x = 1
 	nn.remove(((1.1,1.1),x))
-	self.assertEqual(1,len(nn))
+	self.assertEqual(0,len(nn))
 	
     def test_get_all(self):
         nn = KDTree_2Float()

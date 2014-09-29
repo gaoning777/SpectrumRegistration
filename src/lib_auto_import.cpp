@@ -72,32 +72,35 @@ int main()
 {
   tree_type src(std::ptr_fun(tac));
 
-  twin c0(5.12, 4.23); src.insert(c0);
-  twin c1(4.81, 2.33); src.insert(c1);
-  twin c2(7.32, 6.46); src.insert(c2);
-  twin c3(2.94, 2.27); src.insert(c3);
+  twin c0(1, 1); src.insert(c0);
+  twin c1(1, 2); src.insert(c1);
+  twin c2(2, 1); src.insert(c2);
+  twin c3(2, 2); src.insert(c3);
+/*
   twin c4(8.30, 0.72); src.insert(c4);
   twin c5(5.12, 7.66); src.insert(c5);
   twin c6(3.13, 3.10); src.insert(c6);
   twin c7(9.62, 7.56); src.insert(c7);
   twin c8(2.09, 2.17); src.insert(c8);
   twin c9(2.11, 0.01); src.insert(c9);
+*/
   //edit here to add/remove nodes
   //insert user insert and erase to add/remove nodes and after that call optimise the balance the tree.
   std::cout << src << std::endl;
 
+/*
   src.erase(c0);
   src.erase(c1);
   src.erase(c3);
   src.erase(c5);
-
+*/
   src.optimise();
 
   std::cout << src << std::endl;
 
-  twin s(2.12,3.12);
+  twin s(1,1);
   std::vector<twin> v;
-  unsigned int const range=2;
+  unsigned int const range=1;
   src.find_within_range(s,range,std::back_inserter(v));
   std::cout << "found   " << v.size() << " nodes within range " << range
                 << " of " << s << ":\n";
@@ -105,6 +108,9 @@ int main()
   for (; ci != v.end(); ++ci)
   	std::cout << *ci << " ";
   std::cout << "\n" << std::endl; 
+
+  std::pair<tree_type::const_iterator,double> results=src.find_nearest(s,1.0);
+  std::cout<<*results.first<<" "<<results.second<<std::endl;
 
   return 0;
 }

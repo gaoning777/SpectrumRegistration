@@ -14,7 +14,7 @@
  *    This is different to a binary tree, where identical children are always to the right
  *    So, KDTree has the relationships:
  *    * The left branch is <= its parent (in binary tree, this relationship is a plain < )
- *    * The right branch is <= its parent (same as binary tree)
+ *    * The right branch is >= its parent (same as binary tree)
  *
  *    This is done for mostly for performance.
  *    Its a LOT easier to maintain a consistent tree if we use the <= relationship.

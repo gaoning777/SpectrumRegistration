@@ -73,7 +73,10 @@ void generatePointCloud(PointCloud<T> &point)
 	while(true)
 	{
 		//add code here to add new points
+		point.add_point(1.0,1.0);
 		point.add_point(1.0,2.0);
+		point.add_point(2.0,2.0);
+		point.add_point(2.0,1.0);
 		break;
 	}
 }
@@ -99,6 +102,7 @@ void perf_test()
 	index.buildIndex();
 	double t1=get_time();
 	cout << "Build Index<>: " << (t1-t0)*1e3 << " ms\n";
+	
 
 }
 

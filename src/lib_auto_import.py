@@ -11,7 +11,7 @@ def main():
 	nn.add(((2.0,1.0),4))
 	print len(nn)
 	result= {}
-	result = nn.find_within_range((1.0,1.0),0.9)
+	result = nn.find_within_range((1.0,1.0),1.0)
 	for record in result:
 		print record
         
