@@ -81,7 +81,7 @@ namespace KDTree
           }
         return true;
       }
-
+/*
       bool
       encloses(value_type const& __V) const
       {
@@ -93,6 +93,27 @@ namespace KDTree
           }
         return true;
       }
+*/
+
+	//added by ning to calculate cartesian distance
+	//is the point V within range of this region?
+	bool 
+	encloses(value_type const& __V) const
+	{
+		double distance=0.0;
+		for(size_t __i = 0; __i != __K; ++__i)
+		{
+			double temp;
+			temp=((double)_M_acc(__V, __i)-(double((_M_low_bounds[__i]+_M_high_bounds[__i])))/2.0);
+			distance+=temp*temp;
+		}
+		if(distance>((double)(_M_high_bounds[0]-_M_low_bounds[0])/2.0))
+			return false;
+		return true;
+	}
+
+
+	//end by ning
 
       _Region&
       set_high_bound(value_type const& __V, size_t const __L)
