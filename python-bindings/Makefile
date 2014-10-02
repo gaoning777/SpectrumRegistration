@@ -18,7 +18,7 @@ py-kdtree_wrap.cxx: py-kdtree.i py-kdtree.hpp py-kdtree.i.tmpl py-kdtree.hpp.tmp
 	swig -python -modern -c++ py-kdtree.i
 
 _kdtree.so: py-kdtree_wrap.cxx 
-	$(CXX) $(CPPFLAGS) -c py-kdtree_wrap.cxx -I$(PY_INCLUDE_DIR) -I$(INCLUDE_DIR)
+	$(CXX) $(CPPFLAGS) -fPIC -c py-kdtree_wrap.cxx $(PY_INCLUDE_DIR) -I$(INCLUDE_DIR)
 	$(CXX) $(CPPFLAGS) -shared  py-kdtree_wrap.o -o _kdtree.so
 
 clean:
