@@ -2,9 +2,8 @@ This is the git repository for Spectrum Access System
 APModel-----python codes for data population
 include-----c++ contains nanaflann/libkdtree library, which are both c++ verison of KD tree
 test--------test codes in c++ for KD-tree testing for both nanoflann and libkdtree
-src---------codes in c++ to add points and build the tree
-Makefile----compile both test and src
+src---------codes in python to build the tree and start the flask restful service
+Makefile----compile test 
+data--------data file to populate the kd-tree
+python-bindings----swig codes to generate python wrappers for kd-tree 
 
-Limitation right now
-(1) it supports add/remove/find_withinrange but find_withinrange doesn't use euclidean  distance
-(2) it only supports long long as the value in tree nodes
