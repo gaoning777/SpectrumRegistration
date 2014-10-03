@@ -17,6 +17,25 @@ def range_query():
 	result=tree.find_within_range((lon,lat),distance)
 	return str(result)
 	
+@app.route("/add_ap",methods=['GET'])
+def add_ap():
+	lon=float(request.args.get('lon',''))
+	lat=float(request.args.get('lat',''))
+	tree.add(((lon,lat),1))
+	return "(lon=%lf,lat=%lf) is inserted into the tree." %(lon,lat)
+
+@app.route("/remove_ap",methods=['GET'])
+def remove_ap():
+	lon=float(request.args.get('lon',''))
+	lat=float(request.args.get('lat',''))
+	if(tree.remove(((lon,lat),1))):
+		return "(lon=%lf,lat=%lf) is removed from the tree." %(lon,lat)
+	return "remove failed."
+
+@app.route("/optimize",methods=['GET'])
+def optimize():
+	tree.optimize()
+	return "optimize complete."
 
 if __name__ == "__main__":
 	#execfile('TreePopulate.py')
