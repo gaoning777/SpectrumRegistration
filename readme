@@ -2,8 +2,10 @@ This is the git repository for Spectrum Access System
 APModel-----python codes for data population
 include-----c++ contains nanaflann/libkdtree library, which are both c++ verison of KD tree
 test--------test codes in c++ for KD-tree testing for both nanoflann and libkdtree
-	test/benchmark---------try to stress test the single kd-tree throughput&latency
+		test/benchmark---------try to stress test the single node kd-tree throughput&latency
 src---------codes in python to build the tree and start the flask restful service
+		src/concoord-----------concoord objects for data synchronization
+				read "readme" in that directory and instantiate the concoord objects
 Makefile----compile test 
 data--------data file to populate the kd-tree
 python-bindings----swig codes to generate python wrappers for kd-tree 

@@ -38,6 +38,6 @@ def optimize():
 	return "optimize complete."
 
 if __name__ == "__main__":
-	#execfile('TreePopulate.py')
+	# flask uses thread local objects so that the tree object  is accessible from all the other functions.
 	tree = TreePopulate.buildTree()
 	app.run(host='0.0.0.0')

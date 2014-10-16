@@ -1,0 +1,7 @@
+Instantiate Concoord Objects:
+	1. update PYTHON PATH
+		export PYTHONPATH=$PYTHONPATH:/home/ubuntu/Spectrum_Access/spectrum_access/src/concoord/
+	2. create concoord object proxy
+		concoord object -o UpdateQueue.UpdateQueue
+	3. start concoord object
+		concoord replica -o UpdateQueue.UpdateQueue -a $IP -p 14000

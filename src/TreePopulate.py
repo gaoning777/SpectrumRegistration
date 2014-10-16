@@ -6,6 +6,7 @@ import numpy as np
 sys.path.append("../python-bindings/")
 from kdtree import KDTree_2Float
 
+# populate the tree with buildTree, called by flask service at start.
 def fileOrUrl(filename, url):
 	try:
 		file =  open(filename)
