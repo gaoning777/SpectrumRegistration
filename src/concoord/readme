@@ -2,14 +2,15 @@ Instantiate Concoord Objects:
 	1. update PYTHON PATH
 		export PYTHONPATH=$PYTHONPATH:/home/ubuntu/Spectrum_Access/spectrum_access/src/concoord/
 	2. create concoord object proxy
-		concoord object -o UpdateQueue.UpdateQueue
-	3. start concoord object(use IP instead of Host)
-		concoord replica -o UpdateQueue.UpdateQueue -a $IP -p 14000
+		concoord object -o UpdateQueue.TransactionQueues
+	3. remove % before numbers after ==/!=
+	4. start concoord object(use IP instead of Host)
+		concoord replica -d -o UpdateQueue.TransactionQueues -a 192.168.3.215 -p 14000
 			or
-		concoord replica -o UpdateQueue.UpdateQueue -b $RemoteIP:14000 -a $LocalIP -p 14000
-	4. use the concoord object in client
-		use UpdateQueueproxy.UpdateQueue
-		e.g. queue=UpdateQueueproxy.UpdateQueue("10.10.10.1:14000, 10.10.10.2:14000")
+		concoord replica -d -o UpdateQueue.TransactionQueues -b 192.168.3.215:14000 -a $LocalIP -p 14000
+	5. use the concoord object in client
+		from UpdateQueueproxy import *
+		e.g. queues=TransactionQueues("192.168.3.210:14000, 192.168.3.215:14000, 192.168.3.216:14000")
 
 Files:
 	updatequeue.py: it's a concoord object and the class TransactionQueues stores a separate queue for each of the server to store the update operations.
