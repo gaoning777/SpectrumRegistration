@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request
 from UpdateQueueproxy import *
 import TreePopulate
+import subprocess
 app = Flask(__name__)
 
 #testing
@@ -62,7 +63,7 @@ if __name__ == "__main__":
 	param=""
 	for serverIP in servermap:
 		param+=serverIP+":14000,"
-	queues = UpdateQueueproxy.TransactionQueues(param[:-1])
+	queues = TransactionQueues(param[:-1])
 	# obtain its own IP address
 	p1=subprocess.Popen(["ifconfig","eth0"],stdout=subprocess.PIPE)
 	p2=subprocess.Popen(["grep","inet addr"],stdin=p1.stdout,stdout=subprocess.PIPE)
