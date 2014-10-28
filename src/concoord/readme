@@ -10,3 +10,7 @@ Instantiate Concoord Objects:
 	4. use the concoord object in client
 		use UpdateQueueproxy.UpdateQueue
 		e.g. queue=UpdateQueueproxy.UpdateQueue("10.10.10.1:14000, 10.10.10.2:14000")
+
+Files:
+	updatequeue.py: it's a concoord object and the class TransactionQueues stores a separate queue for each of the server to store the update operations.
+	servermap: it contains ip addresses used by TransactionQueues to correspond the queues to each of the server so that when the server needs to add a transaction, it sends its own IP and the TransactionQueue will push to all the queues except the sender itself.

@@ -19,7 +19,7 @@ class Transaction:
 	def serialize(self):
 		return str(self.kind)+","+str(self.lat)+","+str(self.lon)
 	@staticmethod
-	def deserialize(self,string):
+	def deserialize(string):
 		fields=string.split(',')
 		if int(fields[0]) != 1: 
 			return int(fields[0]),float(fields[1]),float(fields[2])
@@ -68,33 +68,86 @@ class TransactionQueue:
 			return trans.serialize()
 
 # manipulate several queues
+# it assumes there's file called servermap in current directory telling the IP addresses of the servers
+# function with toothers is to add transactions to all the queues except the argv[1] IP
 class TransactionQueues:
-	def __init__(self,num=3):
+	def __init__(self):
+		servermapFile=open('servermap','r')
+		i=0
+		# index of ip in servermap corresponds to the index of its queue in queues
+		self.servermap=list()
+		for line in servermapFile:
+			self.servermap.append(line.strip())
+		
+		num=len(self.servermap)
 		self.queues=list()
 		for i in range(num):
 			self.queues.append(TransactionQueue())
+		
+
 	def getSize(self):
 		return len(self.queues)
 	
-	def add_search(self,num,lat,lon,distance):
+	def add_search(self,ip,lat,lon,distance):
+		num=self.servermap.index(ip)
 		if num>=self.getSize():
 			print "Ning Warning:TransactionQueues: index out of bound"
 			return None
                 queue=self.queues[num]
                 queue.add_search(lat,lon,distance)
-        def add_add(self,num,lat,lon):
+
+	def add_search_toothers(self,ip,lat,lon,distance):
+		num=self.servermap.index(ip)
+		if num>=self.getSize():
+			print "Ning Warning:TransactionQueues: index out of bound"
+			return None
+		for i in range(self.getSize()):
+			if i==num:
+				continue;
+			queue=self.queues[i]
+			queue.add_search(lat,lon,distance)
+
+
+        def add_add(self,ip,lat,lon):
+		num=self.servermap.index(ip)
 		if num>=self.getSize():
                         print "Ning Warning:TransactionQueues: index out of bound"
                         return None
                 queue=self.queues[num]
                 queue.add_add(lat,lon)
-        def add_remove(self,num,lat,lon):
+
+	def add_add_toothers(self,ip,lat,lon):
+		num=self.servermap.index(ip)
+		if num>=self.getSize():
+			print "Ning Warning:TransactionQueues: index out of bound"
+			return None
+		for i in range(self.getSize()):
+			if i==num:
+				continue;
+			queue=self.queues[i]
+			queue.add_add(lat,lon)
+
+        def add_remove(self,ip,lat,lon):
+		num=self.servermap.index(ip)
 		if num>=self.getSize():
                         print "Ning Warning:TransactionQueues: index out of bound"
                         return None
                 queue=self.queues[num]
                 queue.add_remove(lat,lon)
-        def pop(self,num):
+
+	def add_remove_toothers(self,ip,lat,lon):
+		num=self.servermap.index(ip)
+		if num>=self.getSize():
+			print "Ning Warning:TransactionQueues: index out of bound"
+			return None
+		for i in range(self.getSize()):
+			if i==num:
+				continue;
+			queue=self.queues[i]
+			queue.add_remove(lat,lon)
+
+        def pop(self,ip):
+		num=self.servermap.index(ip)
 		if num>=self.getSize():
                         print "Ning Warning:TTransactionQueues: index out of bound"
                         return None
@@ -122,22 +175,28 @@ class UpdateQueue:
 
 '''
 def main():
-	queues=TransactionQueues(3)	
-	#queues.add_search(0,5,5,13)
-	#queues.add_add(0,7,6)
-	queues.add_remove(1,9,8)
-	#queues.add_add(3,4,5)
-	#numQueues=queues.getSize()
+	queues=TransactionQueues()	
+	queues.add_search("192.168.3.210",5,5,13)
+	queues.add_add("192.168.3.215",7,6)
+	queues.add_remove("192.168.3.216",9,8)
+	queues.add_add_toothers("192.168.3.210",4,5)
+	numQueues=queues.getSize()
 	
-	for i in range(numQueues):
-		print "Queue"+str(i)
-		trans=queues.pop(i)
-		while trans!=None:
-			trans.toString()
-			trans=queues.pop(i)
-
-	trans=queues.pop(1)
-	trans.toString()
+	print "Queue"+"192.168.3.210"
+	trans=queues.pop("192.168.3.210")
+	while trans!=None:
+		print trans
+		trans=queues.pop("192.168.3.210")
+	print "Queue"+"192.168.3.215"
+	trans=queues.pop("192.168.3.215")
+	while trans!=None:
+		print trans
+		trans=queues.pop("192.168.3.215")
+	print "Queue"+"192.168.3.216"
+	trans=queues.pop("192.168.3.216")
+	while trans!=None:
+		print trans
+		trans=queues.pop("192.168.3.216")
 
 if __name__ =="__main__":
 	main()
