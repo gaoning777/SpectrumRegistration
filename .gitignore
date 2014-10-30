@@ -1,3 +1,10 @@
 *.pyc
 UpdateQueueproxy.py
 APs.json
+
+_kdtree.so
+kdtree.py
+py-kdtree.hpp
+py-kdtree.i
+py-kdtree_wrap.cxx
+py-kdtree_wrap.o

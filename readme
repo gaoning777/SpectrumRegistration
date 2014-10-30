@@ -10,3 +10,8 @@ Makefile----compile test
 data--------data file to populate the kd-tree
 python-bindings----swig codes to generate python wrappers for kd-tree 
 
+
+How to start the server
+1. Go to src/concoord, instantiate the concoord objects according to readme in that directory
+2. Compile python-bindings
+3. Start flask. python src/flask_service.py
