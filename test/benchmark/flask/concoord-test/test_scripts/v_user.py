@@ -5,14 +5,15 @@ import numpy as np
 
 class Transaction(object):
 	def __init__(self):
+		self.serverList=list()
+		self.serverList.append('spectrum')
+		self.serverList.append('spectrum2')
+		self.serverList.append('spectrum3')
 		pass
-	def randomServer():
-		serverList=list()
-		serverList.append("spectrum")
-		serverList.append("spectrum2")
-		serverList.append("spectrum3")
+
+	def randomServer(self):
 		index=np.random.randint(0,3)
-		return serverList[index]
+		return self.serverList[index]
 
 	def run(self):
 		# unit of 0.005 degree(0.5KM)
@@ -27,7 +28,7 @@ class Transaction(object):
 		lat=  32.749+float(np.random.randint(1,2969) )*0.005
 
 		start=time.time()
-		conn=httplib.HTTPConnection(randomServer(),5000)
+		conn=httplib.HTTPConnection(self.randomServer(),5000)
 		request="/range_query?lon="+str(lon)+"&lat="+str(lat)+"&distance="+str(0.002)
 		conn.request("GET",request)
 		response=conn.getresponse()

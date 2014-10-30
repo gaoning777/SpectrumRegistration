@@ -2,3 +2,6 @@ Under this directory
 flask-test: use multi-mechanize to parallelize threads for stress tests
 	run with "multimech-run flask-test"
 test_serial.py: a python program to generate requests serially and benchmark the performance
+
+install multi-mechanize
+	pip install -U multi-mechanize
