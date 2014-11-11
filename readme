@@ -9,9 +9,40 @@ src---------codes in python to build the tree and start the flask restful servic
 Makefile----compile test 
 data--------data file to populate the kd-tree
 python-bindings----swig codes to generate python wrappers for kd-tree 
+rsync.sh----a script to sync codes with all the other servers(called at spectrum2) 
 
 
 How to start the server
 1. Go to src/concoord, instantiate the concoord objects according to readme in that directory
 2. Compile python-bindings
 3. Start flask. python src/flask_service.py
+
+
+
+Gevent & Pypy
+	apt-get install pypy
+	apt-get install pypy-dev
+	pip install virtualenv   #use virtualenv for a separate environment of pypy
+	
+	# activate virtualenv pypy
+	virtualenv -p /usr/lib/pypy/bin/pypy-c ~/pypy
+	. pypy/bin/activate
+	
+	#install gevent (run install without sudo)
+	apt-get install libssl-dev libev-dev libffi-dev ncurses-dev  #prerequisite for cffi
+	pip install cffi
+	git clone https://github.com/schmir/gevent.git
+	cd gevent
+	git checkout pypy-hacks
+	pypy setup.py install
+
+	#install pypycore for the compatibility of gevent with pypy
+	git clone https://github.com/gevent-on-pypy/pypycore.git
+	cd pypycore
+	CFLAGS=-O2 pip install -e .
+
+	#export new gevent core
+	export GEVENT_LOOP=pypycore.loop	
+	
+	#problems with concoord, one can always install in python and copy to the virtualenv directory	
+

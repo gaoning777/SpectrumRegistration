@@ -1,15 +1,15 @@
 from flask import Flask
 from flask import request
-from UpdateQueueproxy import *
-import TreePopulate
+#from UpdateQueueproxy import *
+#import TreePopulate
 import subprocess
 app = Flask(__name__)
 
 #testing
-@app.route("/hello")
+@app.route("/")
 def hello():
 	return "Hello World!"
-
+'''
 @app.route("/range_query",methods=['GET'])
 def range_query():
 	lon=float(request.args.get('lon',''))# second param is default value
@@ -51,11 +51,12 @@ def remove_ap():
 def optimize():
 	tree.optimize()
 	return "optimize complete."
-
+'''
 if __name__ == "__main__":
 	# flask uses thread local objects so that the tree object  is accessible from all the other functions.
-	tree = TreePopulate.buildTree()
+	# tree = TreePopulate.buildTree()
 	# initializing the Concoord object requires IP addresses and ports
+	'''
 	servermapFile=open('concoord/servermap','r')
 	servermap=list()
 	for line in servermapFile:
@@ -71,5 +72,5 @@ if __name__ == "__main__":
 	p4=subprocess.Popen(["awk",'{ print $1 }'],stdin=p3.stdout,stdout=subprocess.PIPE)
 	ip=p4.communicate()
 	serverIP=ip[0].strip()
-
-	app.run(host='0.0.0.0')
+	'''
+	app.run(host='0.0.0.0',debug=True)

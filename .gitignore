@@ -8,3 +8,7 @@ py-kdtree.hpp
 py-kdtree.i
 py-kdtree_wrap.cxx
 py-kdtree_wrap.o
+
+nohup.out
+
+rsync.sh

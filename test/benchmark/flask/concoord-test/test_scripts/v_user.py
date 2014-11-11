@@ -28,7 +28,9 @@ class Transaction(object):
 		lat=  32.749+float(np.random.randint(1,2969) )*0.005
 
 		start=time.time()
-		conn=httplib.HTTPConnection(self.randomServer(),5000)
+		#conn=httplib.HTTPConnection(self.randomServer(),5000)
+		conn=httplib.HTTPConnection('192.168.3.215',5000)
+
 		request="/range_query?lon="+str(lon)+"&lat="+str(lat)+"&distance="+str(0.002)
 		conn.request("GET",request)
 		response=conn.getresponse()

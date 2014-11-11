@@ -5,9 +5,9 @@ Instantiate Concoord Objects:
 		concoord object -o UpdateQueue.TransactionQueues
 	3. remove % before numbers after ==/!=
 	4. start concoord object(use IP instead of Host)
-		concoord replica -d -o UpdateQueue.TransactionQueues -a 192.168.3.215 -p 14000
+		nohup concoord replica -d -o UpdateQueue.TransactionQueues -a 192.168.3.215 -p 14000 &
 			or
-		concoord replica -d -o UpdateQueue.TransactionQueues -b 192.168.3.215:14000 -a $LocalIP -p 14000
+		nohup concoord replica -d -o UpdateQueue.TransactionQueues -b 192.168.3.215:14000 -a $LocalIP -p 14000 &
 	5. use the concoord object in client
 		from UpdateQueueproxy import *
 		e.g. queues=TransactionQueues("192.168.3.210:14000, 192.168.3.215:14000, 192.168.3.216:14000")
