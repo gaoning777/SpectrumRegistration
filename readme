@@ -18,31 +18,50 @@ How to start the server
 3. Start flask. python src/flask_service.py
 
 
+Environment Setup
+	#Steps to setup environment to run Spectrum Access System
+	sudo apt-get install update
+	sudo apt-get install upgrade
+	sudo apt-get install git,build-essential
+	# pull the source codes down
 
-Gevent & Pypy
-	apt-get install pypy
-	apt-get install pypy-dev
-	pip install virtualenv   #use virtualenv for a separate environment of pypy
-	
-	# activate virtualenv pypy
-	virtualenv -p /usr/lib/pypy/bin/pypy-c ~/pypy
-	. pypy/bin/activate
-	
-	#install gevent (run install without sudo)
-	apt-get install libssl-dev libev-dev libffi-dev ncurses-dev  #prerequisite for cffi
-	pip install cffi
-	git clone https://github.com/schmir/gevent.git
-	cd gevent
-	git checkout pypy-hacks
-	pypy setup.py install
 
-	#install pypycore for the compatibility of gevent with pypy
-	git clone https://github.com/gevent-on-pypy/pypycore.git
-	cd pypycore
-	CFLAGS=-O2 pip install -e .
+	#install software for compling python wrapper
+	sudo apt-get install swig,python-dev
 
-	#export new gevent core
-	export GEVENT_LOOP=pypycore.loop	
+	#install web servers, and additional python modules
+	sudo apt-get install python-pip
+	sudo pip install flask,numpy,concoord
+
 	
-	#problems with concoord, one can always install in python and copy to the virtualenv directory	
+	Gevent & Pypy
+		sudo apt-get install pypy
+		sudo apt-get install pypy-dev
+		sudo pip install virtualenv   #use virtualenv for a separate environment of pypy
+	
+		# activate virtualenv pypy
+		virtualenv -p /usr/lib/pypy/bin/pypy-c ~/pypy-virtual
+		. pypy/bin/activate
+	
+		#install gevent (run pypy install without sudo)
+		sudo apt-get install libssl-dev libev-dev libffi-dev ncurses-dev  #prerequisite for cffi
+		pip install cffi
+		git clone https://github.com/schmir/gevent.git
+		cd gevent
+		git checkout pypy-hacks
+		pypy setup.py install
+	
+		#install pypycore for the compatibility of gevent with pypy
+		git clone https://github.com/gevent-on-pypy/pypycore.git
+		cd pypycore
+		CFLAGS=-O2 pip install -e .
+	
+		#export new gevent core
+		export GEVENT_LOOP=pypycore.loop	
+		
+		#install the python modules again in pypy
+		#copy concoord, msgpack from /usr/local/lib/python2.7/dist-packages/* ~/pypy-virtual/
+		pip install flask
+		pip install git+https://bitbucket.org/pypy/numpy.git
+
 
