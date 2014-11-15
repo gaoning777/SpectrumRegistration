@@ -15,8 +15,10 @@ rsync.sh----a script to sync codes with all the other servers(called at spectrum
 How to start the server
 1. Go to src/concoord, instantiate the concoord objects according to readme in that directory
 2. Compile python-bindings
-3. Start flask. python src/flask_service.py
-
+#3. Start flask. python src/flask_service.py
+4. start nginx. sudo /etc/init.d/nginx start
+5. start uwgsi. uwsgi --ini /var/www/demoapp/demoapp_uwsgi.ini
+nginx+uWSGI+flask+pypy
 
 Environment Setup
 	#Steps to setup environment to run Spectrum Access System
@@ -33,8 +35,12 @@ Environment Setup
 	sudo apt-get install python-pip
 	sudo pip install flask,numpy,concoord
 
-	
+	#optional: softwares for benchmarking
+	sudo apt-get install apache2-utils,oprofile
+		
+
 	Gevent & Pypy
+		# although I did't use gevent but virtualenv is great with pypy
 		sudo apt-get install pypy
 		sudo apt-get install pypy-dev
 		sudo pip install virtualenv   #use virtualenv for a separate environment of pypy
@@ -59,9 +65,24 @@ Environment Setup
 		#export new gevent core
 		export GEVENT_LOOP=pypycore.loop	
 		
+		#replace /usr/lib/pypy/lib-python/2.7/socket.py with the socket.py in pypycore
+		#in order to install software in virtualenv using pip, use the original socket.py(so keep the old one)
+		
 		#install the python modules again in pypy
 		#copy concoord, msgpack from /usr/local/lib/python2.7/dist-packages/* ~/pypy-virtual/
 		pip install flask
 		pip install git+https://bitbucket.org/pypy/numpy.git
+
+	nginx
+		follow the instruction here to set up nginx with uwsgi to work with flask.
+		http://vladikk.com/2013/09/12/serving-flask-with-nginx-on-ubuntu/
+		main steps are:
+			sudo add-apt-repository ppa:nginx/stable
+			sudo apt-get install nginx
+			pip install uwsgi #in virtualenv pypy
+			make a soft link /etc/ngnix/conf.d/ point to myconf, which specifies traffic going to uwgsi
+			configure uwsgi for python env and flask app
+			start nginx and uwsgi
+			
 
 
