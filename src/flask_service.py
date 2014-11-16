@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import request
-#from UpdateQueueproxy import *
+from UpdateQueueproxy import *
 import TreePopulate
 import subprocess
 app = Flask(__name__)
@@ -56,7 +56,7 @@ def optimize():
 
 if __name__ == "__main__":
 	# flask uses thread local objects so that the tree object  is accessible from all the other functions.
-	# tree = TreePopulate.buildTree()
+	tree = TreePopulate.buildTree()
 	# initializing the Concoord object requires IP addresses and ports
 	'''
 	servermapFile=open('concoord/servermap','r')

@@ -1,6 +1,6 @@
 Instantiate Concoord Objects:
 	1. update PYTHON PATH
-		export PYTHONPATH=$PYTHONPATH:/home/ubuntu/Spectrum_Access/spectrum_access/src/concoord/
+		export PYTHONPATH=$PYTHONPATH:/home/ubuntu/spectrum_access/src/concoord/
 	2. create concoord object proxy
 		concoord object -o UpdateQueue.TransactionQueues
 	3. remove % before numbers after ==/!=

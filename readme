@@ -9,7 +9,7 @@ src---------codes in python to build the tree and start the flask restful servic
 Makefile----compile test 
 data--------data file to populate the kd-tree
 python-bindings----swig codes to generate python wrappers for kd-tree 
-rsync.sh----a script to sync codes with all the other servers(called at spectrum2) 
+rsync.sh----a script to sync codes with all the other servers(in avoidance of frequent push to git.cs.colorado.edu to sync) 
 
 
 How to start the server
@@ -18,7 +18,7 @@ How to start the server
 #3. Start flask. python src/flask_service.py
 4. start nginx. sudo /etc/init.d/nginx start
 5. start uwgsi. uwsgi --ini /var/www/demoapp/demoapp_uwsgi.ini
-nginx+uWSGI+flask+pypy
+nginx+uWSGI+flask
 
 Environment Setup
 	#Steps to setup environment to run Spectrum Access System
@@ -26,7 +26,6 @@ Environment Setup
 	sudo apt-get install upgrade
 	sudo apt-get install git,build-essential
 	# pull the source codes down
-
 
 	#install software for compling python wrapper
 	sudo apt-get install swig,python-dev
@@ -37,7 +36,6 @@ Environment Setup
 
 	#optional: softwares for benchmarking
 	sudo apt-get install apache2-utils,oprofile
-		
 
 	Gevent & Pypy
 		# although I did't use gevent but virtualenv is great with pypy
@@ -83,6 +81,6 @@ Environment Setup
 			make a soft link /etc/ngnix/conf.d/ point to myconf, which specifies traffic going to uwgsi
 			configure uwsgi for python env and flask app
 			start nginx and uwsgi
-			
+		global PYTHONPATH set for kdtree	
 
 
