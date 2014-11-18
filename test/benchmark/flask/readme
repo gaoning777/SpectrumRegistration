@@ -4,4 +4,5 @@ flask-test: use multi-mechanize to parallelize threads for stress tests
 test_serial.py: a python program to generate requests serially and benchmark the performance
 
 install multi-mechanize
-	pip install -U multi-mechanize
+	sudo pip install -U multi-mechanize
+	sudo apt-get install python-matplotlib

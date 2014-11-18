@@ -3,6 +3,8 @@ from flask import request
 from UpdateQueueproxy import *
 import TreePopulate
 import subprocess
+import sys
+import argparse
 app = Flask(__name__)
 
 #testing
@@ -16,7 +18,7 @@ def range_query():
 	lat=float(request.args.get('lat',''))
 	distance=float(request.args.get('distance',''))
 	# process the remaining update transactions
-	'''
+	
 	trans=queues.pop(serverIP)
         while trans!=None:
                 kind,lat,lon=Transaction.deserialize(trans)
@@ -26,7 +28,7 @@ def range_query():
 			tree.remove(((lon,lat),1))
                 trans=queues.pop(serverIP)
 	# return "nearest neighbor searching of (lon:%s, lat:%s) within radius of %s." % (str(lon), str(lat), str(distance))
-	'''
+	
 	result=tree.find_within_range((lon,lat),distance)
 	return str(result)
 	
@@ -55,10 +57,14 @@ def optimize():
 	return "optimize complete."
 
 if __name__ == "__main__":
+	# arguments
+	parser = argparse.ArgumentParser(description='Start a flask service.')
+	parser.add_argument('-p','--python')
+	args=parser.parse_args(sys.argv[1:])
 	# flask uses thread local objects so that the tree object  is accessible from all the other functions.
-	tree = TreePopulate.buildTree()
+	tree = TreePopulate.buildTree(args.python)
 	# initializing the Concoord object requires IP addresses and ports
-	'''
+	
 	servermapFile=open('concoord/servermap','r')
 	servermap=list()
 	for line in servermapFile:
@@ -74,5 +80,5 @@ if __name__ == "__main__":
 	p4=subprocess.Popen(["awk",'{ print $1 }'],stdin=p3.stdout,stdout=subprocess.PIPE)
 	ip=p4.communicate()
 	serverIP=ip[0].strip()
-	'''
+	
 	app.run(host='0.0.0.0',debug=True)
