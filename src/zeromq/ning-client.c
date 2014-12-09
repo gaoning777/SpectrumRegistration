@@ -16,12 +16,15 @@ int main (void)
     zsocket_connect (client, SERVER_ENDPOINT);
 
     int sequence = 0;
+	char **ids=malloc(2*sizeof(char*));
+	ids[0]="sm1";
+	ids[1]="sm2";
     while (!zctx_interrupted) {
         //  We send a request, then we work to get a reply
         char request [10];
         sprintf (request, "%d", ++sequence);
 	zmsg_t *msg=zmsg_new();
-	zframe_t* frame1=zframe_new("sm1", 3);
+	zframe_t* frame1=zframe_new(ids[sequence%2], 3);
 	zframe_t* frame2=zframe_new(request,1);
 	zmsg_append(msg,&frame1);
 	zmsg_append(msg,&frame2);
@@ -36,30 +39,15 @@ int main (void)
             if (rc == -1)
                 break;          //  Interrupted
 
-            //  .split process server reply
-            //  Here we process a server reply and exit our loop if the
-            //  reply is valid. If we didn't a reply we close the client
-            //  socket and resend the request. We try a number of times
-            //  before finally abandoning:
-            
             if (items [0].revents & ZMQ_POLLIN) {
                 //  We got a reply from the server, must match sequence
                 zmsg_t *msg = zmsg_recv (client);
-		/*
-                if (atoi (reply) == sequence) {
-                    printf ("I: server replied OK (%s)\n", reply);
-                    expect_reply = 0;
-                }
-                else
-                    printf ("E: malformed reply from server: %s\n",
-                        reply);
-		*/
 		zmsg_print(msg);
 		zmsg_destroy(&msg);	
 		expect_reply=0;
             }
         }
-	sleep(5);
+	sleep(3);
     }
     zctx_destroy (&ctx);
     return 0;

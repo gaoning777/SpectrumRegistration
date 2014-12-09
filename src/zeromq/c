@@ -451,6 +451,7 @@ for i in $*; do
 
         #   Need to remove any quotes in command string to pass as macro
         SYNTAX=`echo $COMMAND | sed -e "s/\"//g"`
+	echo $COMMAND
         $COMMAND -DCCOPTS="\"$SYNTAX\"" >$FILENAME.lst 2>&1
 
         #   Show listing and abort if there was a compile error
@@ -498,6 +499,7 @@ for i in $*; do
             echo "$TRACE ($COMMAND)">>$CCTRACE
         fi
 
+        echo $COMMAND
         $COMMAND 2> $FILENAME.lst
 
         #   Show listing and abort if there was a link error
