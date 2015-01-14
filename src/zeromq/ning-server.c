@@ -1,41 +1,65 @@
 #include "czmq.h"
 #define WORKER_READY   "\001"      //  Signals worker is ready
 
-//worker: send to the server the worker is ready
-void *prepare(zctx_t *ctx,const char *id)
+void destroy_states(zctx_t **ctx, void **worker)
 {
-        void *worker = zsocket_new (ctx, ZMQ_REQ);
+        zsocket_destroy(*ctx,*worker);
+        zctx_destroy (ctx);
+}
+
+void send_message(void* worker, const char *message,const byte *client_id, int client_idsize, const char *smName)
+{
+        zmsg_t *msg=zmsg_new();;
+        zframe_t *wrap_frame= zframe_new(client_id,client_idsize);
+        zframe_t *frame1= zframe_new(smName, strlen(smName));
+        zframe_t *frame2= zframe_new(message, strlen(message));
+        zmsg_append(msg,&frame1);
+        zmsg_append(msg,&frame2);
+        zmsg_wrap(msg, wrap_frame);
+        zmsg_send(&msg, worker);
+}
+
+//the caller needs to free the message
+char *wait_from_router(void* worker, byte *client_id, int *client_idsize)
+{
+        zmsg_t *msg=zmsg_recv(worker);
+        if(!msg)
+        {
+                printf("interrupted when receiving messages in zeromq\n");
+                return NULL;
+        }
+        //it will get four frames: client_id, empty frame, sm_id frame and content frame
+	//zmsg_print(msg);
+        zframe_t *des=zmsg_first(msg);
+	*client_idsize=(int)(zframe_size(des));
+        byte *tmp=zframe_data(des);
+	int i=0;
+	for(i=0;i<*client_idsize;i++)
+	{
+		*(client_id+i)=*tmp;
+		tmp++;
+	}
+        zmsg_next(msg);
+        zmsg_next(msg);
+        des=zmsg_next(msg);
+        return zframe_strdup(des);
+}
+
+void worker_ready(const char *id, zctx_t** ctx, void** worker)
+{
+        *ctx = zctx_new ();
+        *worker = zsocket_new (*ctx, ZMQ_REQ);
 
         //  Set random identity to make tracing easier
         char identity [10];
         strncpy(identity,id,9);
-        zmq_setsockopt (worker, ZMQ_IDENTITY, identity, strlen (identity));
-        zsocket_connect (worker, "tcp://localhost:5556");
+        zmq_setsockopt (*worker, ZMQ_IDENTITY, identity, strlen (identity));
+        zsocket_connect (*worker, "tcp://localhost:5556");
 
         //  Tell broker we're ready for work
         printf ("I: (%s) worker ready\n", identity);
         zframe_t *frame = zframe_new (WORKER_READY, 1);
-        zframe_send (&frame, worker, 0);
-        return worker;
-}
-
-int worker_main_c (const char *id)
-{
-        zctx_t *ctx = zctx_new ();
-        void *worker=prepare(ctx,id);
-
-        int reply=0;
-        while (true) {
-                zmsg_t *msg = zmsg_recv (worker);
-                zmsg_print(msg);
-                if (!msg)
-                        break;//  Interrupted
-
-                printf ("I: (%s) normal reply (%d)\n", id,++reply);
-                zmsg_send (&msg, worker);
-        }
-        zctx_destroy (&ctx);
-        return 0;
+        zframe_send (&frame, *worker, 0);
 }
 
 // router to router proxy thread
@@ -67,10 +91,12 @@ int router_main_c (void)
                 if (items [0].revents & ZMQ_POLLIN) {
                         //  Use worker identity for load-balancing
                         zmsg_t *msg = zmsg_recv (backend);
-			printf("router backend");
-                        zmsg_print(msg);
+                        //zmsg_print(msg);
                         if (!msg)
+			{
+				printf("interrupted during receive in router\n");
                                 break;          //  Interrupted
+			}
                         zframe_t *identity = zmsg_unwrap (msg);
                         zlist_append (workers, identity);
 
@@ -86,16 +112,13 @@ int router_main_c (void)
                         zmsg_t *msg = zmsg_recv (frontend);
                         if (msg) {
                                 //zmsg_wrap (msg, (zframe_t *) zlist_pop (workers));
-				printf("router frontend1");
-				zmsg_print(msg);
+				//zmsg_print(msg);
                                 zframe_t *des=zmsg_first(msg);
                                 zmsg_next(msg);
                                 des=zmsg_next(msg);
 				zframe_t *newdes=zframe_dup(des);
                                 //zframe_t *des=zframe_new("sm1",3);
                                 zmsg_wrap (msg, newdes);
-				printf("router fronend2");
-				zmsg_print(msg);
                                 zmsg_send (&msg, backend);
                         }
                 }

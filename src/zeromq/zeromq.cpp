@@ -5,20 +5,48 @@
 #include <unistd.h>
 #include <vector>
 using namespace std;
-void worker_main(string s)
+
+zeromq_rpc::zeromq_rpc():
+	ctx()
+	, worker()
+	, smName()
 {
-	worker_main_c(s.c_str());
+	client_id=new byte[20];//zeromq router will generate id less than 20 chars 
 }
-void router_main()
+
+//called by the Server/Main.cc to run the router thread
+void zeromq_rpc::startZeroMQ() 
 {
 	router_main_c();
 }
-int main(void)
-{	
-	vector<thread> threads;
-	threads.emplace_back(worker_main,"sm1");
-	threads.emplace_back(worker_main,"sm2");
-	thread router(router_main);
-	sleep(30);
-	return 0;
+
+//called by Server/Globals.cc to send a ready message to router
+void zeromq_rpc::register_sm(string smName)
+{
+	this->smName=smName;
+	worker_ready(smName.c_str(),&ctx, &worker);
 }
+
+//called by Event/Loop.c to wait for messages
+string zeromq_rpc::wait()
+{
+	char *returnstr=wait_from_router(worker, client_id, &client_idsize);
+	byte *cur=client_id;
+	if(returnstr==NULL)
+		return "";
+	string str(returnstr);
+	return str;
+}
+
+void zeromq_rpc::respond(string str)
+{
+	send_message(worker,str.c_str(),client_id,client_idsize,smName.c_str());
+}
+
+void zeromq_rpc::destroy()
+{
+	destroy_states(&ctx, &worker);
+}
+
+
+
