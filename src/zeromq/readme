@@ -1,3 +1,2 @@
 install zmq and czmq from the source
-run ./build all
-
+run make

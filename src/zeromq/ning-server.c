@@ -67,7 +67,8 @@ int router_main_c (void)
                 if (items [0].revents & ZMQ_POLLIN) {
                         //  Use worker identity for load-balancing
                         zmsg_t *msg = zmsg_recv (backend);
-                        //zmsg_print(msg);
+			printf("router backend");
+                        zmsg_print(msg);
                         if (!msg)
                                 break;          //  Interrupted
                         zframe_t *identity = zmsg_unwrap (msg);
@@ -85,12 +86,16 @@ int router_main_c (void)
                         zmsg_t *msg = zmsg_recv (frontend);
                         if (msg) {
                                 //zmsg_wrap (msg, (zframe_t *) zlist_pop (workers));
+				printf("router frontend1");
+				zmsg_print(msg);
                                 zframe_t *des=zmsg_first(msg);
                                 zmsg_next(msg);
                                 des=zmsg_next(msg);
 				zframe_t *newdes=zframe_dup(des);
                                 //zframe_t *des=zframe_new("sm1",3);
                                 zmsg_wrap (msg, newdes);
+				printf("router fronend2");
+				zmsg_print(msg);
                                 zmsg_send (&msg, backend);
                         }
                 }
