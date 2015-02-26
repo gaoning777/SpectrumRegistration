@@ -16,6 +16,7 @@
 
 namespace KDTree
 {
+  //a base struct for each node in KD-Tree from which _Node will inherit
   struct _Node_base
   {
     typedef _Node_base* _Base_ptr;
@@ -45,6 +46,8 @@ namespace KDTree
     }
   };
 
+  //child struct of _Node_base with _Val as the value type
+  //only left and right pointers are declared, which means this is a binary tree
   template <typename _Val>
     struct _Node : public _Node_base
     {
@@ -91,6 +94,7 @@ namespace KDTree
 #endif
     };
 
+    //this compare functor is used for comparison on a certain dimension
   template <typename _Val, typename _Acc, typename _Cmp>
     class _Node_compare
     {
@@ -149,6 +153,7 @@ namespace KDTree
       The distance functor and the accessor are references to the template
       parameters of the KDTree.
    */
+  //the accumulated distance is simply aggregated together
   template <typename _ValA, typename _ValB, typename _Dist,
 	    typename _Acc>
   inline
