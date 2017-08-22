@@ -707,7 +707,7 @@ namespace KDTree
 
                         // deal with the left and right edges of the tree...
                         // if the dead_dad was at the edge, then substitude...
-                        // but if there IS no new dead, then left_most is the dead_dad's parent
+                        // but if there is no new dead, then left_most is the dead_dad's parent
                         if (dead_dad == _M_get_leftmost())
                            _M_set_leftmost( (step_dad ? step_dad : _S_parent(dead_dad)) );
                         if (dead_dad == _M_get_rightmost())
@@ -1033,7 +1033,7 @@ namespace KDTree
                         std::nth_element(__A, __m, __B, compare);
                         this->insert(*__m);
                         if (__m != __A) _M_optimise(__A, __m, __L+1);
-                        if (++__m != __B) _M_optimise(__m, __B, __L+1);
+                        if (++__m != __B) _M_optimise(__m, __B, __L+1);//B is not inserted because the function of _M_optimise is to insert begin() to end()-1
                      }
 
                   _Link_const_type

@@ -53,7 +53,7 @@ namespace KDTree
                            _M_high_bounds[__i] = _M_acc(__V,__i) + __R;
                         }
                      }
-
+                  //CenterPt uses the _M_low_bounds in _Region to specify a point so _M_high_bounds is not used
                   bool
                      intersects_with(_CenterPt const& __THAT) const
                      {

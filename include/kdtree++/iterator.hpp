@@ -84,7 +84,7 @@ namespace KDTree
          inline void
             _M_decrement()
             {
-              //soldier? and the right child is the root
+              //soldier and both the left and the right children are the root
                if (!_M_node->_M_parent) // clearly identify the header node
                {
                   _M_node = _M_node->_M_right;
